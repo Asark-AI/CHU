@@ -1,0 +1,528 @@
+/* ============================================================
+   1) Base Variables — Shopify / Polaris Inspired
+============================================================ */
+:root {
+  --accent: #0b6b5e;
+  --accent-2: #074f45;
+  --accent-3: #0fa884;
+  /* solid sea-blue page background to blend with logo */
+  --bg: #cfeff0; /* sea blue */
+  --card: #ffffff;
+  --muted: #576163;
+  --surface: #f6fbfa;
+  --radius: 10px;
+  --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-strong: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --transition-fast: 0.18s ease;
+  --font-base: 16px;
+  --text-main: #15201e;
+}
+
+/* ============================================================
+   2) Global Resets & Typography
+============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-main);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: var(--font-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   3) Header & Navigation
+============================================================ */
+header {
+  background: var(--card);
+  backdrop-filter: blur(4px);
+  border-bottom: 1px solid #e3e5e7;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 22px 28px;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* hide the hamburger on desktop; shown on small screens */
+.menu-toggle { display: none; }
+
+.brand {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.brand .logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.brand .logo img#company-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.brand > div {
+  line-height: 1;
+}
+
+.brand > div div:first-child {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.brand > div div:last-child {
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+/* Navigation with counters */
+nav ol {
+  counter-reset: nav-counter;
+  list-style: none;
+  display: flex;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+nav ol li {
+  counter-increment: nav-counter;
+}
+
+nav ol li a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 10px 14px 10px 36px;
+  border-radius: calc(var(--radius) - 2px);
+  font-weight: 600;
+  font-size: 0.95rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  transition: background var(--transition-fast), color var(--transition-fast), transform 0.12s ease;
+}
+
+nav ol li a::before {
+  content: counter(nav-counter);
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+nav ol li a:hover {
+  background: linear-gradient(90deg, rgba(15,168,132,0.06), rgba(11,107,94,0.03));
+  color: var(--accent-2);
+}
+
+nav ol li a.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: var(--shadow-strong);
+}
+
+nav ol li a.active::before {
+  background: #fff;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+/* Dropdown styles */
+.has-dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 10px 14px 10px 36px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-toggle:focus {
+  outline: 3px solid rgba(0, 128, 96, 0.12);
+  outline-offset: 3px;
+}
+
+/* arrow indicator */
+.dropdown-toggle::after {
+  content: '\25BE'; /* small down chevron */
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.72rem;
+  transform-origin: center;
+  transition: transform 180ms ease;
+  color: var(--muted);
+}
+
+/* secondary (nested) toggle shows right chevron */
+.dropdown-menu .dropdown-toggle::after { content: '\25B8'; }
+
+.dropdown-menu {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 10px);
+  min-width: 220px;
+  background: var(--card);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(20,20,20,0.08);
+  border: 1px solid #eaecef;
+  padding: 8px;
+  /* hidden by default but animatable */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms linear;
+  z-index: 30;
+  list-style: none;
+}
+
+.dropdown-menu li { counter-increment: submenu-counter; }
+
+.dropdown-menu li a {
+  display: block;
+  padding: 10px 12px;
+  color: var(--text-main);
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.dropdown-menu li a:hover {
+  background: #f3fbf6;
+  color: var(--accent);
+}
+
+/* Separate counters for dropdowns so submenu items number 1..N */
+.dropdown-menu { counter-reset: submenu-counter; }
+.dropdown-menu li { counter-increment: submenu-counter; }
+.dropdown-menu li a { position: relative; padding-left: 36px; }
+.dropdown-menu li a::before {
+  content: counter(submenu-counter);
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--accent-2);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Nested submenu inside a dropdown should also reset its own counter */
+.dropdown-menu .dropdown-menu { counter-reset: subsubmenu-counter; }
+.dropdown-menu .dropdown-menu li { counter-increment: subsubmenu-counter; }
+.dropdown-menu .dropdown-menu li a::before {
+  content: counter(subsubmenu-counter);
+}
+
+/* show on hover for desktop */
+@media (hover: hover) and (min-width: 721px) {
+  .has-dropdown:hover > .dropdown-menu,
+  .has-dropdown:focus-within > .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+}
+
+/* show when parent has .open (used by JS for mobile) */
+.has-dropdown.open > .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0) scale(1); pointer-events: auto; }
+
+/* rotate arrow when expanded */
+.dropdown-toggle[aria-expanded="true"]::after { transform: rotate(90deg); color: var(--accent-2); }
+.dropdown-menu .dropdown-toggle[aria-expanded="true"]::after { transform: rotate(90deg); }
+
+/* Menu root / visual polish */
+.menu-root > .dropdown-toggle {
+  font-size: 1rem;
+  padding: 12px 16px 12px 36px;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+/* desktop dropdown panel */
+.dropdown-menu {
+  min-width: 280px;
+  padding: 10px 8px;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(8,24,18,0.08);
+}
+.dropdown-menu li a { padding: 12px 14px; display:flex; align-items:center; gap:10px; font-size:0.98rem; }
+.dropdown-menu li + li { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(2,8,6,0.04); }
+
+/* subtle separators */
+.dropdown-menu li a { border-radius: 8px; }
+
+/* Mobile: transform mobile menu into a slide-out drawer */
+@media (max-width: 720px) {
+  /* mobile drawer (off-canvas) */
+  .mobile-menu {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 320px;
+    background: var(--card);
+    padding: 18px;
+    box-shadow: -12px 0 40px rgba(2,8,6,0.12);
+    border-left: 1px solid rgba(14,20,18,0.04);
+    z-index: 80;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 260ms cubic-bezier(.2,.9,.3,1), visibility 260ms linear;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .mobile-menu.open {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* page overlay for mobile drawer - base (hidden) and visible when active */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0);
+    z-index: 70;
+    pointer-events: none;
+    transition: background 240ms ease, opacity 240ms ease;
+    opacity: 0;
+  }
+
+  body.menu-active::before {
+    background: rgba(10,10,10,0.38);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .mobile-menu .dropdown-toggle { width: 100%; text-align: left; padding-left: 12px; }
+  .mobile-menu .dropdown-menu { position: relative; left: 0; top: 0; box-shadow: none; border: none; padding-left: 6px; }
+  .mobile-menu a { display:block; padding:12px 10px; font-size:1rem; color:var(--text-main); text-decoration:none; border-radius:8px; }
+  .mobile-menu a:hover { background: #f6fbf9; color:var(--accent-2); }
+  .mobile-close { position:absolute; right:12px; top:12px; background:transparent; border:none; font-size:20px; cursor:pointer; padding:6px; border-radius:8px; }
+  .mobile-close:focus { outline: 2px solid rgba(11,107,94,0.12); }
+
+  /* show hamburger on small screens and hide desktop nav */
+  .menu-toggle { display: inline-flex; background: transparent; border: none; font-size: 22px; cursor: pointer; padding: 8px; border-radius: 8px; }
+  nav#main-nav { display: none; }
+  .mobile-menu { width: min(92vw, 360px); }
+  .brand .logo { width: 48px; height: 48px; }
+}
+
+/* responsive typography and spacing */
+html { font-size: clamp(14px, 1.1vw, 16px); }
+
+@media (max-width: 920px) {
+  .container { padding: 18px 16px; }
+  .nav { gap: 12px; }
+  .hero.card { grid-template-columns: 1fr; padding: 20px; }
+  .hero-visual { display: none; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 12px 10px; }
+  .brand > div div:first-child { font-size: 0.95rem; }
+  .dropdown-toggle { padding-left: 28px; }
+  nav ol { gap: 10px; flex-wrap: wrap; }
+}
+
+/* Nested submenu (submenu of dropdown) */
+.dropdown-menu .has-dropdown { position: relative; }
+.dropdown-menu .dropdown-menu {
+  /* show nested submenu stacked under its parent for reliability */
+  position: absolute;
+  left: 0;
+  top: calc(100% + 6px);
+  min-width: 220px;
+  box-shadow: 0 10px 30px rgba(6,22,18,0.08);
+  border: 1px solid rgba(14,20,18,0.04);
+  background: var(--card);
+  padding: 6px;
+  /* animation-friendly */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms linear;
+}
+
+/* show nested submenu on hover (desktop) */
+@media (hover: hover) and (min-width: 721px) {
+  .dropdown-menu .has-dropdown:hover > .dropdown-menu,
+  .dropdown-menu .has-dropdown:focus-within > .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+}
+
+/* mobile: nested submenu displays as block when parent has .open */
+.dropdown-menu .has-dropdown.open > .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0) scale(1); position: relative; left: 0; top: 0; box-shadow: none; border: none; pointer-events: auto; }
+
+.dropdown-menu { z-index: 60; }
+.dropdown-menu .dropdown-menu { z-index: 70; }
+
+/* ============================================================
+   4) Buttons
+============================================================ */
+.btn-primary {
+  display: inline-block;
+  background: linear-gradient(90deg,var(--accent),var(--accent-3));
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 128, 96, 0.16);
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.btn-primary:hover {
+  background: var(--accent-2);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 128, 96, 0.18);
+}
+
+/* ============================================================
+   5) Hero & Layout
+============================================================ */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.hero.card {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  align-items: start;
+  background: linear-gradient(180deg, #ffffff, #fbfdfc);
+  border-radius: 16px;
+  padding: 36px;
+  border: 1px solid rgba(14,20,18,0.04);
+  box-shadow: 0 8px 30px rgba(11,107,94,0.04);
+}
+
+.hero-visual img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  box-shadow: 0 8px 30px rgba(11,107,94,0.06);
+  border: 1px solid rgba(14,20,18,0.04);
+}
+
+@media (max-width: 920px) {
+  .hero-visual { display:none; }
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.hero p.lead {
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+/* ============================================================
+   6) Cards & Grids
+============================================================ */
+.card {
+  background: var(--card);
+  padding: 22px;
+  border-radius: calc(var(--radius) - 2px);
+  box-shadow: var(--shadow-light);
+  border: 1px solid rgba(14,20,18,0.04);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-strong);
+  transform: translateY(-2px);
+}
+
+.card h2 {
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Section spacing */
+main > section { padding: 28px 0; }
+main > section .card { margin: 0 auto; }
+
+/* Section heading accent */
+.card h2::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 3px;
+  margin-left: 12px;
+  border-radius: 2px;
+  background: linear-gradient(90deg,var(--accent),var(--accent-3));
+}
+
+.card h2 .tag {
